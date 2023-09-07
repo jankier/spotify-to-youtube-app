@@ -1,0 +1,44 @@
+@media only screen and (max-width: 769px) {
+    .dropdown-menu.active{
+        position: absolute; 
+        opacity: 1;
+        visibility: visible;
+        width: 100%;
+        padding-left: 0;
+        left: 0;
+        animation: growDown 300ms ease-in-out forwards;
+        transform-origin: top center;
+    }
+    @keyframes growDown {
+        0% {
+            transform: scaleY(0)
+        }
+        80% {
+            transform: scaleY(1.1)
+        }
+        100% {
+            transform: scaleY(1)
+        }
+    }
+    .dropdown-menu.inactive{
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        visibility: hidden;
+        padding-left: 0;
+        left: 0;
+    }
+}
+.theme-icon-sun.light{
+    display: block;
+}
+.theme-icon-sun.dark{
+    display: none;
+}
+.theme-icon-moon.light{
+    display: none;
+}
+.theme-icon-moon.dark{
+    display: block;
+}
+
