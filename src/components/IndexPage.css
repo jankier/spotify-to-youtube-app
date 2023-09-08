@@ -1,0 +1,9 @@
+.error-bar {
+    display: none;
+}
+.visible-div.active{
+    display: block;
+}
+.visible-div.inactive{
+    display: none;
+}

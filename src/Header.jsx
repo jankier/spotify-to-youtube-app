@@ -52,14 +52,14 @@ function Header() {
     };
 
   return (
-    <header className="dark:bg-gray-900 md:flex sm:items-center md:items-center md:justify-between bg-amber-300 p-6 shadow">
+    <header className="dark:bg-gray-900 md:flex sm:items-center md:items-center md:justify-between bg-amber-300 p-6 border-b shadow-md dark:shadow-neutral-800">
         <div className="flex flex-shrink-0 text-black dark:text-stone-50 gap-5 items-center justify-between">
             <a href="/" className='flex gap-5 items-center'>
                 <img className="w-10" src={logo} alt="logo"/>
                 <span className="text-2xl font-semibold tracking-tight duration-500">
                     <span className="text-custom-green">Spotify</span>
                     To
-                    <span className="text-custom-red">Youtube</span>
+                    <span className="text-custom-red">YouTube</span>
                 </span>
             </a>
             <span className="cursor-pointer md:hidden" onClick={() => {setOpen(!open)}}>
