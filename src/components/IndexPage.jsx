@@ -47,9 +47,16 @@ function IndexPage() {
     "?fields=items%28track%28id%2Cname%2Cexternal_urls%2Cartists%28name%29%2Calbum%28images%2Cname%29%29%29", playlistParameters)
       .then(response => response.json())
       .then(data => {
-        setTracks(data.items);
+        if(!data.error){
+          error_bar[0].style.display = "none";
+          setTracks(data.items);
+        }
+        else{
+          console.log(data.error);
+          error_bar[0].style.display = "flex";
+          spotify_link[0].value = "";
+        }
       });
-      error_bar[0].style.display = "none";
       spotify_link[0].value = "";
       setVisibleDiv(true);
     }
@@ -66,6 +73,24 @@ function IndexPage() {
     setTracks(newTracks); 
   }
 
+  const getTitles = () => {
+    var interval = 1000;
+    tracks.forEach((track, idx) => {
+      setTimeout(() => {
+        fetchYoutubeSong(track.track.artists[0].name + "%20" + track.track.name);
+      }, idx * interval)
+    })
+  }
+
+  async function fetchYoutubeSong(element) {
+    
+    var songParameters = {
+      method: "GET"
+    }
+    await fetch("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&order=viewCount&q=" + element + "%C3%A1&key=" + process.env.REACT_APP_YOUTUBE_API_KEY, songParameters)
+      .then(response => response.json())
+      .then(data => {console.log(data.items)})
+  }
     return (
       <div className="mt-20 md:mt-44 items-center justify-center flex-col">
         <div className="m-auto max-w-sm md:max-w-xl border p-6 md:p-8 rounded-2xl shadow-md dark:shadow-neutral-800">
@@ -79,14 +104,14 @@ function IndexPage() {
                    className="spotify-link w-full border my-3 py-2 px-3 rounded-2xl outline-none" 
             type="text"
             placeholder="Link to playlist"/>
-            <div className="error-bar text-orange-500 flex mb-3">
+            <div className="error-bar text-orange-500 flex mb-3 duration-500">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                 <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
               </svg>
               <div className='error-text ml-2'>Please enter valid Spotify playlist link.</div>
             </div>
             <button onClick={getPlaylist} className="bg-custom-green p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500">Load playlist</button>
-            <button className="bg-custom-green mt-3 p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500">Convert</button>
+            <button onClick={getTitles} className="bg-custom-green mt-3 p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500">Convert</button>
             <div className="text-xs text-center mt-3 text-gray-500">
               Click Load playlist to obtain the tracks.<br></br>
               Click Convert to transfer your playlist.
@@ -95,14 +120,14 @@ function IndexPage() {
         </div>
         <div className="m-auto flex-col justify-center bg-stone-50 dark:bg-gray-800">
           <div className={`visible-div ${visibleDiv ? 'active' : 'inactive'} text-xs text-center mt-3 text-gray-500`}>
-            Click on a song banner to open it in Spotify.<br></br>
+            Click on a song banner to open it with Spotify.<br></br>
             Click the trashcan icon to delete a song from the playlist.
           </div>
           {tracks.map((track) =>{
             return(
               <>
               <div key={track.track.id} className="flex justify-center items-center m-2">
-                <div className="w-80 md:w-1/3 h-20 flex items-center border rounded-md shadow-md dark:shadow-neutral-800 text-black dark:text-white font-semibold hover:">
+                <div className="w-80 md:w-1/4 h-20 flex items-center border rounded-md shadow-md dark:shadow-neutral-800 text-black dark:text-white font-semibold hover:">
                   <a href={track.track.external_urls.spotify} target="_blank" rel="noreferrer" className="pl-2 shrink-0">
                     <img src={track.track.album.images[2].url} alt="song cover"></img>
                   </a>
