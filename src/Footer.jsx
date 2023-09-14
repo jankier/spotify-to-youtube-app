@@ -2,7 +2,7 @@ function Footer() {
     return (
       <div className="text-xs md:text-lg font-semibold mt-auto p-5 bg-amber-300 dark:bg-gray-900 flex items-center justify-between shadow border-t">
           <span className="duration-500 text-black dark:text-stone-50">
-              © 2023 SpotifyToYoutube™. All Rights Reserved.
+              © 2023 SpotifyToYoutube™
           </span>
           <div className="flex gap-3 mr-4 items-center">
               <a href="https://www.facebook.com/" className="text-black dark:text-stone-50 hover:text-blue-500 dark:hover:text-blue-500 duration-500">

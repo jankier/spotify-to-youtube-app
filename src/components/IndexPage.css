@@ -1,9 +1,37 @@
 .error-bar {
     display: none;
 }
+.no-preview {
+    display: none;
+}
 .visible-div.active{
     display: block;
 }
 .visible-div.inactive{
     display: none;
 }
+.song-cover:hover{
+    filter: brightness(75%);
+    filter: blur(100%);
+    transition: all 1s ease;
+}
+.song-cover{
+    filter: brightness(100%);
+    filter: blur(0%);
+    transition: all 1s ease;
+}
+.song-cover .play-button{
+    visibility: hidden;
+}
+.song-cover:hover .play-button{
+    visibility: visible;
+}
+/* .progress-bar{
+    height: 48px;
+    width: 48px;
+    left: 15px;
+    top: 9px;
+    border: 5px solid white;
+    border-radius: 50%;
+    display: none;
+} */
