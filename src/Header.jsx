@@ -3,7 +3,7 @@ import logo from "./assets/spotify-to-youtube-logo.png"
 import { useState, useEffect, useRef } from "react";
 import "./Header.css";
 
-function Header() {
+function Header({user}) {
 
     const [open, setOpen] = useState(false);
 
@@ -55,8 +55,8 @@ function Header() {
     <header className="dark:bg-gray-900 md:flex sm:items-center md:items-center md:justify-between bg-amber-300 p-6 border-b shadow-md dark:shadow-neutral-800">
         <div className="flex flex-shrink-0 text-black dark:text-stone-50 gap-5 items-center justify-between">
             <a href="/" className='flex gap-5 items-center'>
-                <img className="w-10" src={logo} alt="logo"/>
-                <span className="text-2xl font-semibold tracking-tight duration-500">
+                <img className="w-10 select-none" src={logo} alt="logo"/>
+                <span className="text-2xl font-semibold tracking-tight duration-500 select-none">
                     <span className="text-custom-green">Spotify</span>
                     To
                     <span className="text-custom-red">YouTube</span>
@@ -69,7 +69,8 @@ function Header() {
             </span>
         </div>
         <div className="flex cursor-pointer">
-            <div ref={menuRef} className={`dropdown-menu ${open ? 'active' : 'inactive'} bg-amber-300 dark:bg-gray-900`}>
+            <div ref={menuRef} className={`dropdown-menu ${open ? 'active' : 'inactive'} bg-amber-300 dark:bg-gray-900 z-10`}>
+                
                 <ul className="text-xl font-semibold md:flex md:items-center text-black dark:text-stone-50 md:static 
                 md:w-auto md:pl-0 md:opacity-100 md:my-0">
                     <li className="mx-5 my-6 sm:my-6">
@@ -86,12 +87,20 @@ function Header() {
                     <Link to={'/SpotifyLogin'} onClick={() => {setOpen(!open)}} className="hover:text-custom-green duration-500">
                         Spotify
                     </Link>
-                    </li>
-                    <li className="mx-5 my-5">
-                    <Link to={'/YoutubeLogin'} onClick={() => {setOpen(!open)}} className="hover:text-custom-red duration-500">
-                        Youtube
-                    </Link>
-                    </li>
+                    </li>{
+                        user ? (                    
+                            <li className="mx-5 my-5">
+                                <Link to={'/YoutubeLogout'} onClick={() => {setOpen(!open)}} className="hover:text-custom-red duration-500">
+                                    Sign out
+                                </Link>
+                            </li>
+                        ) : (                        
+                            <li className="mx-5 my-5">
+                                <Link to={'/YoutubeLogin'} onClick={() => {setOpen(!open)}} className="hover:text-custom-red duration-500">
+                                    Sign in
+                                </Link>
+                            </li>)
+                    }
                     <li className="mx-5 my-5 flex">
                         <div className={`theme-icon-sun ${theme === "dark" ? "light" : "dark"}`}>
                             <svg onClick={handleThemeSwitch} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 dark:text-white  dark:hover:text-amber-300 ">

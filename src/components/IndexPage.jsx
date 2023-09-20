@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import './IndexPage.css'
+
 function IndexPage() {
 
   var error_bar = document.getElementsByClassName("error-bar");
@@ -55,7 +56,7 @@ function IndexPage() {
         if(!data.error){
           error_bar[0].style.display = "none";
           setTracks(data.items);
-          console.log(data.items);
+          // console.log(data.items);
           setVisibleDiv(true);
         }
         else{
@@ -80,7 +81,7 @@ function IndexPage() {
     setTracks(newTracks);
   }
 
-  const playPreview = (song, id, duration) => {
+  const playPreview = (song, id) => {
     audio.src = song;
     if(play_button[id].classList.contains("hidden")){
       audio.pause();
@@ -146,7 +147,7 @@ function IndexPage() {
   }
 
     return (
-      <div className="mt-20 md:mt-44 items-center justify-center flex-col">
+      <div className="mt-40 md:mt-44 items-center justify-center flex-col">
         <div className="m-auto max-w-sm md:max-w-xl border p-6 md:p-8 rounded-2xl shadow-md dark:shadow-neutral-800">
           <h1 className="text-3xl text-center text-black dark:text-white font-semibold duration-500">
             Convert <span className="text-custom-green">Spotify
@@ -155,7 +156,7 @@ function IndexPage() {
           <div className=" pt-4 max-w-md m-auto flex flex-col">
             <input onChange={event => setSearchInput(event.target.value)} 
                    onKeyDown={enterPressed} 
-                   className="spotify-link w-full border my-3 py-2 px-3 rounded-2xl outline-none" 
+                   className="spotify-link w-full border my-3 py-2 px-3 rounded-2xl outline-none select-none" 
             type="text"
             placeholder="Link to playlist"/>
             <div className="error-bar text-orange-500 flex mb-3 duration-500">
@@ -164,8 +165,8 @@ function IndexPage() {
               </svg>
               <div className='ml-2'>Please enter valid Spotify playlist link.</div>
             </div>
-            <button onClick={getPlaylist} className="bg-custom-green p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500">Load playlist</button>
-            <button onClick={getTitles} className="bg-custom-green mt-3 p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500">Convert</button>
+            <button onClick={getPlaylist} className="bg-custom-green p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500 select-none">Load playlist</button>
+            <button onClick={getTitles} className="bg-custom-green mt-3 p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500 select-none">Convert</button>
             <div className="text-xs text-center mt-3 text-gray-500">
               Click Load playlist to obtain the tracks.<br></br>
               Click Convert to transfer your playlist.
@@ -174,30 +175,30 @@ function IndexPage() {
         </div>
         <div className="m-auto flex-col justify-center bg-stone-50 dark:bg-gray-800">
           <div className={`visible-div ${visibleDiv ? 'active' : 'inactive'} text-xs text-center mt-3 text-gray-500`}>
-            Click on a song banner to preview the song.<br></br>
-            Click on a song name/artist to open it with Spotify.<br></br>
-            Click the trashcan icon to delete a song from the playlist.<br></br>
+            Click on song banner to preview the song.<br></br>
+            Click on song name/artist to open it with Spotify.<br></br>
+            Click the trashcan icon to remove song from playlist.<br></br>
           </div>
           {tracks.map((track, index) => {
             return(
               <>
               <div key={track.track.id} className="flex justify-center items-center m-2">
-                <div className="ml-8 w-80 md:w-1/4 h-20 flex items-center border rounded-md shadow-md dark:shadow-neutral-800 text-black dark:text-white font-semibold hover:">
-                  <div className="song-cover">
-                    <img  className="pl-2 shrink-0 w-full" src={track.track.album.images[2].url} alt="song cover"></img>
-                    <button tabIndex="0" className="play-button block absolute pl-1 top-1/3 left-1/3 text-white">
+                <div className="ml-8 w-2/3 md:w-96 h-20 flex items-center border rounded-md shadow-md dark:shadow-neutral-800 text-black dark:text-white font-semibold">
+                  <div className="song-cover shrink-0">
+                    <img  className="pl-2" src={track.track.album.images[2].url} alt="song cover"></img>
+                    <button tabIndex="0" className="play-button block absolute pl-1 text-white">
                       <svg onClick={() => {playPreview(track.track.preview_url, index, track.track.duration_ms)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                         <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
                       </svg>
                       {/* <div className="progress-bar absolute top-1.5 left-3.5"></div> */}
                     </button>
-                    <button tabIndex="0" className="stop-button hidden absolute pl-1 top-1/3 left-1/3 text-white">
-                    <svg onClick={() => {playPreview(track.track.preview_url, index, track.track.duration_ms)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                    <button tabIndex="0" className="stop-button hidden absolute pl-1 text-white">
+                    <svg onClick={() => {playPreview(track.track.preview_url, index)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                       <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
                     </svg>
                     </button>
                   </div>
-                  <a href={track.track.external_urls.spotify} target="_blank" rel="noreferrer" className="ml-2 truncate flex flex-col">
+                  <a href={track.track.external_urls.spotify} target="_blank" rel="noreferrer" className="ml-2 mr-2 truncate flex flex-col">
                     <span>
                       {track.track.name}
                     </span>

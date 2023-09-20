@@ -10,6 +10,14 @@
 .visible-div.inactive{
     display: none;
 }
+.play-button {
+    left: 21px;
+    top: 18px;
+}
+.stop-button {
+    left: 20px;
+    top: 18px;
+}
 .song-cover:hover{
     filter: brightness(75%);
     filter: blur(100%);
@@ -19,6 +27,8 @@
     filter: brightness(100%);
     filter: blur(0%);
     transition: all 1s ease;
+    width: 64px;
+    height: 56px;
 }
 .song-cover .play-button{
     visibility: hidden;
