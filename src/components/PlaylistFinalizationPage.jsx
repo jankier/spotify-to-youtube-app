@@ -12,7 +12,7 @@ function PlaylistFinalizationPage({user, playlist}) {
   var playlist_name = document.getElementsByClassName("playlist-name");
 
   var newPlaylistData = [];
-  name_used[0].style.display = "none";
+  // name_used[0].style.display = "none";
 
   const [input, setInput] = useState("");
   const [playlistList, setPlaylistList] = useState("");
@@ -124,7 +124,7 @@ function PlaylistFinalizationPage({user, playlist}) {
         }
         else{
           console.log(data.error);
-          playlist_name[0].value = "";
+          navigate("/SomethingWentWrong")
         }
       });
   }

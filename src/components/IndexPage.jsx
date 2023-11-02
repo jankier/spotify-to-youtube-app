@@ -143,7 +143,7 @@ function IndexPage({user, setPlaylist}) {
       })
       Promise.all(promises)
       .then(() => setPlaylist(youtubeplaylist))
-      .then(() => navigate("/SpotifyLogin"))
+      .then(() => navigate("/PlaylistFinalizationPage"))
     }
     else{
       no_user[0].style.display = "flex";
