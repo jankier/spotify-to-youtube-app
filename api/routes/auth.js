@@ -23,7 +23,7 @@ router.get("/logout", (req, res) => {
     res.redirect("http://localhost:3000");
 });
 
-router.get("/youtube", passport.authenticate("youtube", {scope:["https://www.googleapis.com/auth/youtube.readonly"]}));
+router.get("/youtube", passport.authenticate("youtube", {scope:["https://www.googleapis.com/auth/youtube"]}));
 
 router.get("/youtube/callback", passport.authenticate("youtube", {
     successRedirect: "http://localhost:3000",

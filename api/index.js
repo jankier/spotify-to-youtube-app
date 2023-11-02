@@ -9,7 +9,7 @@ const app = express()
 app.use(cookieSession({
     name: "session",
     keys:["spotify-to-youtube"],
-    maxAge: 24 * 60 * 60 * 100,
+    maxAge: 60 * 60 * 100,
 }));
 
 app.use(passport.initialize());

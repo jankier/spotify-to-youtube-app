@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 import IndexPage from './components/IndexPage';
-import SpotifyLoginPage from './components/SpotifyLoginPage';
+import PlaylistFinalizationPage from './components/PlaylistFinalizationPage';
 import YoutubeLoginPage from './components/YoutubeLoginPage';
 import YoutubeLogoutPage from './components/YoutubeLogoutPage';
-import AboutUs from './components/AboutUs';
+import SomethingWentWrong from './components/SomethingWentWrong';
 import HowToPage from './components/HowToPage';
 import Footer from './Footer';
 import Header from './Header';
@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [playlist, setPlaylist] = useState([]);
 
   useEffect(() => {
     const getUser = () => {
@@ -18,7 +19,7 @@ function App() {
         method: "GET",
         credentials: "include",
         headers: {
-          Accept: "application/json",
+          "Accept": "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Credentials": true,
         },
@@ -27,7 +28,6 @@ function App() {
         throw new Error("authentication failed")
       }).then(resObject => {
         setUser(resObject.user);
-        console.log(resObject.user);
       }).catch(err => {
         console.log(err);
       })
@@ -35,18 +35,16 @@ function App() {
     getUser();
   }, []);
 
-  console.log(user);
-
   return (
     <div className='h-screen flex flex-col bg-stone-50 dark:bg-gray-800'>
       <Header user={user}/>
       <div className='bg-stone-50 dark:bg-gray-800 overflow-auto'>
         <Routes>
-          <Route index element={<IndexPage/>}/>
-          <Route path='/SpotifyLogin' element={<SpotifyLoginPage/>}/>
+          <Route index element={<IndexPage user={user} setPlaylist={setPlaylist}/>}/>
+          <Route path='/PlaylistFinalizationPage' element={<PlaylistFinalizationPage user={user} playlist={playlist}/>}/>
           <Route path='/YoutubeLogin' element={<YoutubeLoginPage/>}/>
           <Route path='/YoutubeLogout' element={<YoutubeLogoutPage/>}/>
-          <Route path='/AboutUs' element={<AboutUs/>}/>
+          <Route path='/SomethingWentWrong' element={<SomethingWentWrong/>}/>
           <Route path='/Howto' element={<HowToPage/>}/>
         </Routes>
       </div>

@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import './IndexPage.css'
 
-function IndexPage() {
+function IndexPage({user, setPlaylist}) {
+
+  const navigate = useNavigate();
 
   var error_bar = document.getElementsByClassName("error-bar");
+  var no_user = document.getElementsByClassName("no-user");
   var spotify_link = document.getElementsByClassName("spotify-link");
   var no_preview = document.getElementsByClassName("no-preview");
   var play_button = document.getElementsByClassName("play-button");
   var stop_button = document.getElementsByClassName("stop-button");
   const audio = new Audio();
+  const youtubeplaylist = [];
 
   const [searchInput, setSearchInput] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -49,14 +54,13 @@ function IndexPage() {
         }
       }
     // items(track(id,name,external_urls,duration_ms,preview_url,artists(name),album(images,name)))
-    await fetch("https://api.spotify.com/v1/playlists/" + playlistID + "/tracks/" +
+    await fetch("https://api.spotify.com/v1/playlists/" + playlistID + "/tracks" +
     "?fields=items%28track%28id%2Cname%2Cexternal_urls%2Cduration_ms%2Cpreview_url%2Cartists%28name%29%2Calbum%28images%2Cname%29%29%29", playlistParameters)
       .then(response => response.json())
       .then(data => {
         if(!data.error){
           error_bar[0].style.display = "none";
           setTracks(data.items);
-          // console.log(data.items);
           setVisibleDiv(true);
         }
         else{
@@ -126,24 +130,41 @@ function IndexPage() {
 }
 
   const getTitles = () => {
-    var interval = 1000;
-    tracks.forEach((track, idx) => {
-      setTimeout(() => {
-        var artistName = track.track.artists[0].name.replaceAll(" ","%20");
-        var songName = track.track.name.replaceAll(" ","%20");
-        console.log(artistName + "%20" + songName);
-        fetchYoutubeSong(artistName + "%20" + songName);
-      }, idx * interval)
-    })
+    if (user){
+      const interval = 1000;
+      no_user[0].style.display = "none";
+      const promises = [];
+      tracks.forEach((track, idx) => {
+        setTimeout(() => {
+          var artistName = track.track.artists[0].name.replaceAll(" ","%20");
+          var songName = track.track.name.replaceAll(" ","%20");
+          promises.push(fetchYoutubeSong(artistName + "%20" + songName));
+        }, idx * interval)
+      })
+      Promise.all(promises)
+      .then(() => setPlaylist(youtubeplaylist))
+      .then(() => navigate("/SpotifyLogin"))
+    }
+    else{
+      no_user[0].style.display = "flex";
+    }
   }
 
   async function fetchYoutubeSong(element) {
     var songParameters = {
       method: "GET"
     }
-    await fetch("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&order=viewCount&q=" + element + "%C3%A1&key=" + process.env.REACT_APP_YOUTUBE_API_KEY, songParameters)
+    return fetch("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&order=relevance&q=" + element + "&key=" + process.env.REACT_APP_YOUTUBE_API_KEY, songParameters)
       .then(response => response.json())
-      .then(data => {console.log(data.items)})
+      .then(data => {
+        if(!data.error){
+          youtubeplaylist.push(data.items[0])
+        }
+        else{
+          console.log(data.error);
+          navigate("/SomethingWentWrong")
+        }
+      });
   }
 
     return (
@@ -153,7 +174,7 @@ function IndexPage() {
             Convert <span className="text-custom-green">Spotify
             </span> Playlist to <span className="text-custom-red">YouTube</span>
           </h1>
-          <div className=" pt-4 max-w-md m-auto flex flex-col">
+          <div className="pt-4 max-w-md m-auto flex flex-col">
             <input onChange={event => setSearchInput(event.target.value)} 
                    onKeyDown={enterPressed} 
                    className="spotify-link w-full border my-3 py-2 px-3 rounded-2xl outline-none select-none" 
@@ -167,6 +188,12 @@ function IndexPage() {
             </div>
             <button onClick={getPlaylist} className="bg-custom-green p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500 select-none">Load playlist</button>
             <button onClick={getTitles} className="bg-custom-green mt-3 p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500 select-none">Convert</button>
+            <div className="no-user hidden text-orange-500 mt-3 duration-500">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              </svg>
+              <div className='ml-2'>Please sign in to YouTube account to convert playlist.</div>
+            </div>
             <div className="text-xs text-center mt-3 text-gray-500">
               Click Load playlist to obtain the tracks.<br></br>
               Click Convert to transfer your playlist.
@@ -180,6 +207,10 @@ function IndexPage() {
             Click the trashcan icon to remove song from playlist.<br></br>
           </div>
           {tracks.map((track, index) => {
+            if(track === null || track.track === null || track.track.name === null){
+              console.log(index);
+              console.log(track);
+            }
             return(
               <>
               <div key={track.track.id} className="flex justify-center items-center m-2">
@@ -190,7 +221,6 @@ function IndexPage() {
                       <svg onClick={() => {playPreview(track.track.preview_url, index, track.track.duration_ms)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                         <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
                       </svg>
-                      {/* <div className="progress-bar absolute top-1.5 left-3.5"></div> */}
                     </button>
                     <button tabIndex="0" className="stop-button hidden absolute pl-1 text-white">
                     <svg onClick={() => {playPreview(track.track.preview_url, index)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -221,6 +251,7 @@ function IndexPage() {
                   </svg>
                   <div className='ml-2'>Sorry Spotify didn't provide preview for that song.</div>
               </div>
+              {/* {isLoading ? <div>Loading</div> : <div>Content</div>} */}
               </>
             )
           })}

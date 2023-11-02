@@ -77,16 +77,6 @@ function Header({user}) {
                     <Link to={"/Howto"} onClick={() => {setOpen(!open)}} className="hover:text-green-500 duration-500">
                         How to
                     </Link>
-                    </li>
-                    <li className="mx-5 my-5">
-                    <Link to={"/AboutUs"} onClick={() => {setOpen(!open)}} className="hover:text-custom-red duration-500">
-                        About Us
-                    </Link>
-                    </li>
-                    <li className="mx-5 my-5">
-                    <Link to={'/SpotifyLogin'} onClick={() => {setOpen(!open)}} className="hover:text-custom-green duration-500">
-                        Spotify
-                    </Link>
                     </li>{
                         user ? (                    
                             <li className="mx-5 my-5">
