@@ -155,7 +155,7 @@ function PlaylistFinalizationPage({user, playlist}) {
             </div>
             <button onClick={createPlaylist} className="bg-custom-green p-2 w-full text-white rounded-2xl hover:bg-custom-red duration-500 select-none">Proceed</button>
             <div className="text-xs text-center mt-3 text-gray-500">
-              Click Proceed to obtain playlist link.<br></br>
+              Click Proceed to obtain playlist.<br></br>
             </div>
           </div>
         </div>
