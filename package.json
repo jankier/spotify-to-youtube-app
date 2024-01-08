@@ -2,6 +2,7 @@
   "name": "spotify-to-youtube",
   "version": "0.1.0",
   "private": true,
+  "homepage": "spotify-to-youtube-app-pages.dev",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
