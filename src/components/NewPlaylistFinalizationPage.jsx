@@ -1,9 +1,9 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./PlaylistFinalizationPage.css";
+import "./NewPlaylistFinalizationPage.css";
 
-function PlaylistFinalizationPage({ user, playlist }) {
+function NewPlaylistFinalizationPage({ user, playlist }) {
   const navigate = useNavigate();
 
   var error_bar = document.getElementsByClassName("error-bar");
@@ -199,4 +199,4 @@ function PlaylistFinalizationPage({ user, playlist }) {
   );
 }
 
-export default PlaylistFinalizationPage;
+export default NewPlaylistFinalizationPage;
